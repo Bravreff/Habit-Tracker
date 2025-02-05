@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 
 export default function App(){
@@ -15,11 +15,14 @@ export default function App(){
     habits.map((habit)=>
     habit.id === id ?{...habit, packed: !habit.packed}: habit))
   }
+  function ClearAll(){
+    setHabits([]);
+  }
   return(
     <div className="app">
     <Logo/>
     <HabitInput onAddHabit={handleAddItems}/>
-    <HabitList habits={habits} onDeleteHabits={handleDeleteHabits} onToggleHobit={handleToggleHobit}/>
+    <HabitList habits={habits} onDeleteHabits={handleDeleteHabits} onToggleHobit={handleToggleHobit} handlerClearAll={ClearAll}/>
  </div>
   )
 }
@@ -43,6 +46,7 @@ function HabitInput({onAddHabit}){
     onAddHabit(hobitArr);
   }
  return(
+  <React.Fragment>
   <form className="add-form" onSubmit={handleSubmit}>
      <h3>Add a new habit to  your day</h3>
       <select value={quantity} 
@@ -53,9 +57,11 @@ function HabitInput({onAddHabit}){
       onChange={e => setDescription(e.target.value)}></input>
       <button>add</button>
     </form>
+    </React.Fragment>
+    
  )
 }
-function HabitList({habits, onDeleteHabits , onToggleHobit}){
+function HabitList({habits, onDeleteHabits , onToggleHobit,handlerClearAll}){
  return(
   <div className="list">
   <ul>{
@@ -63,6 +69,7 @@ function HabitList({habits, onDeleteHabits , onToggleHobit}){
        key={habit.id}
        onDeleteHabits={onDeleteHabits} onToggleHobit={onToggleHobit}/>))
     }</ul>
+    <button onClick={()=>handlerClearAll()}>Clear all</button>
 </div>
  )
 }
@@ -76,5 +83,4 @@ function Item ({habit, onDeleteHabits, onToggleHobit}){
    <button  onClick={()=>onDeleteHabits(habit.id)}>X</button>
  </li>
   )
-  
 }
